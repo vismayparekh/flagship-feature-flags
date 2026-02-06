@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../lib/env";
 
 const api = axios.create({
-  baseURL: API_BASE_URL + "/api",
+  baseURL: `${API_BASE_URL}/api`,
 });
 
 function getTokens() {
@@ -24,7 +24,7 @@ export async function refreshTokenIfNeeded() {
   const t = getTokens();
   if (!t?.refresh) return false;
   try {
-    const res = await axios.post(API_BASE_URL + "/api/auth/token/refresh/", { refresh: t.refresh });
+    const res = await axios.post(`${API_BASE_URL}/api/auth/token/refresh/`, { refresh: t.refresh });
     const next = { ...t, access: res.data.access, refresh: res.data.refresh ?? t.refresh };
     localStorage.setItem("auth", JSON.stringify(next));
     return true;
