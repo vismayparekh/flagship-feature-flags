@@ -1,0 +1,32 @@
+# env / secrets
+.env
+.env.*
+*.env
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.envrc
+
+# django
+db.sqlite3
+media/
+
+# node
+node_modules/
+dist/
+build/
+.vite/
+
+# logs
+*.log
+
+# mac
+.DS_Store
+
+# docker
+**/.docker/
