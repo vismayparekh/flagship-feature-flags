@@ -1,4 +1,4 @@
-# FlagShip — Enterprise Feature Flags Platform (LaunchDarkly-style)
+# FlagShip — Feature Flags Platform 
 
 FlagShip is a portfolio-grade **Feature Flags + Targeting + Rollouts** platform:
 - Multi-tenant: **Organizations → Projects → Environments**
