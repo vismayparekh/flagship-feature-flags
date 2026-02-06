@@ -17,9 +17,13 @@ def env(name, default=""):
 DEBUG = env("DJANGO_DEBUG", "0") == "1"
 SECRET_KEY = env("DJANGO_SECRET_KEY", "dev-secret-change-me")
 
+# ✅ Render host fix: include .onrender.com by default
 ALLOWED_HOSTS = [
     h.strip()
-    for h in env("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    for h in env(
+        "DJANGO_ALLOWED_HOSTS",
+        "localhost,127.0.0.1,0.0.0.0,.onrender.com",
+    ).split(",")
     if h.strip()
 ]
 
@@ -30,10 +34,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "corsheaders",
     "rest_framework",
-
     "apps.accounts",
     "apps.core",
     "apps.flags",
@@ -41,8 +43,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # must be high
+    "corsheaders.middleware.CorsMiddleware",  # ✅ must be high
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ good for admin static in prod
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -95,28 +98,54 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
 }
 
-# ✅ CORS / CSRF (Fix for x-client-key header)
+# =========================
+# ✅ CORS / CSRF (Vercel fix)
+# =========================
+
+# ✅ Allow exact origins (prod domains)
 CORS_ALLOWED_ORIGINS = [
     o.strip()
-    for o in env("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+    for o in env(
+        "CORS_ALLOWED_ORIGINS",
+        # default includes local + your Vercel main domain
+        "http://localhost:5173,https://flagship-feature-flags.vercel.app",
+    ).split(",")
     if o.strip()
 ]
 
+# ✅ Allow Vercel preview deploy domains automatically (recommended)
+# Example: https://flagship-feature-flags-xxxxx-vismayparekhs-projects.vercel.app
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://flagship-feature-flags-.*-vismayparekhs-projects\.vercel\.app$",
+]
+
+# CSRF is mostly for cookie/session flows (admin). Safe to include main Vercel domain.
 CSRF_TRUSTED_ORIGINS = [
     o.strip()
-    for o in env("CSRF_TRUSTED_ORIGINS", "http://localhost:5173").split(",")
+    for o in env(
+        "CSRF_TRUSTED_ORIGINS",
+        "http://localhost:5173,https://flagship-feature-flags.vercel.app",
+    ).split(",")
     if o.strip()
 ]
 
-# This is the key fix:
+# ✅ Needed because your SDK uses X-Client-Key and UI uses Authorization
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "x-client-key",
 ]
+
+# Render behind proxy (helps Django understand HTTPS)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# WhiteNoise static file storage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
