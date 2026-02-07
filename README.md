@@ -1,4 +1,4 @@
-# FlagShip — Feature Flags Platform 
+# FlagShip — Feature Flags Platform
 
 FlagShip is a portfolio-grade **Feature Flags + Targeting + Rollouts** platform:
 - Multi-tenant: **Organizations → Projects → Environments**
@@ -10,7 +10,67 @@ FlagShip is a portfolio-grade **Feature Flags + Targeting + Rollouts** platform:
 - Polished **React + Tailwind** UI
 - **Django Admin** with superuser access (superuser sees everything)
 
+## 🌐 Live Demo
+- Frontend (Web App): https://flagship-feature-flags.vercel.app  
+- Backend (API Base): https://flagship-feature-flags.onrender.com  
+- Health Check: https://flagship-feature-flags.onrender.com/api/health/  
+- Django Admin: https://flagship-feature-flags.onrender.com/admin/  
+
+> Note: Render Free can “sleep” when idle. First API request may take ~30–60 seconds.
+
 ---
+## What is FlagShip?
+
+FlagShip is a **feature flags platform** (similar to LaunchDarkly) that helps teams **release and control features safely** without redeploying code.
+
+Instead of pushing a risky change directly to 100% users, you can:
+- Turn a feature **ON/OFF instantly**
+- Roll it out to **5% → 20% → 50% → 100%** gradually
+- Target only specific users (example: `vip_*`, country = `US`, plan = `pro`)
+- Track who changed what using an **audit log**
+
+This is exactly how real companies ship changes in production without breaking things.
+
+---
+
+## Why is it useful?
+
+In real production systems, releasing features is risky:
+- A new UI/checkout can break payments
+- A fraud rule change can block real customers
+- A backend migration can increase latency
+
+FlagShip solves this by giving you:
+✅ **Safe rollouts** (gradual release)  
+✅ **Instant rollback** (turn OFF in 1 second)  
+✅ **Targeted release** (only certain users get it)  
+✅ **Multi-environment control** (staging vs prod)  
+✅ **Enterprise access control** (RBAC)  
+✅ **Audit trail** (compliance + debugging)
+
+---
+
+## Real-world examples
+
+You would use this platform when:
+- You want to test a new checkout with 10% users first
+- You want only internal employees to see a “beta” feature
+- You want to enable a feature only for premium customers
+- You want to roll back instantly if errors increase
+- You want full tracking for compliance (finance/healthcare)
+
+---
+
+## What makes this project “enterprise-grade”?
+
+FlagShip is built like a real enterprise SaaS product:
+- Multi-tenant structure: **Organizations → Projects → Environments**
+- **RBAC permissions** (Owner/Admin/Developer/Viewer)
+- **Audit log** for every meaningful change
+- Deterministic rollout (same user gets consistent results)
+- Public **SDK Evaluate** endpoint protected by a client key
+- Clean professional UI (React + Tailwind)
+- Django Admin (superuser sees all data like a platform admin)
 
 ## Table of Contents
 - [Features](#features)
